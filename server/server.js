@@ -19,52 +19,52 @@ class NodeServer extends JboxServer {
 
     start() {
         super.start()
-        
-        
+
+
         // Define Bindings for New Connections
         this.io.sockets.on("connection", socket => {
             console.log(`connected: ${socket.id}`);
-        
+
             socket.emit('login', socket.id);
-        
+
             socket.on('disconnect', () => {
                 console.log(`disconnect: ${socket.id}`);
                 io.sockets.emit('disconnect', socket.id);
                 //game.removePlayer(socket.id);
             });
-        
+
             socket.on('setKey', (data) => {
                 console.log(data);
                 //game.recordInput(data.id, data.keyCode, data.value);
             });
-        
+
             socket.on('heartbeat', (data) => {
                 //console.log(data);
                 //let player = game.getPlayerById(data.id);
                 //if (null != player) {
-                    //player.heartbeatTime = new Date(data.time);
+                //player.heartbeatTime = new Date(data.time);
                 //}
             });
-        
+
             socket.on('login', (data) => {
                 console.log(`login: ${data.name}`);
-                
+
                 //if (null == game.getPlayerById(data.name)) {
                 //    let player = game.addPlayer(data.name)
                 //    player.tank.color = data.color;
                 //}
-        
+
             });
-            
+
             socket.on('clientUpdate', (data) => {
-                console.log(data);
+                console.log(`clientUpdate: ${data}`);
                 super.handleClientUpdate(data)
             });
-        
+
         });
-        
+
     }
-    
+
     broadcastState(data) {
         this.io.emit('heartbeat', data)
     }
@@ -87,7 +87,7 @@ app.use(express.static("public"));
 
 // Begin Listening
 server.listen(port, () => {
-  console.log('Server listening at port %d', port);
+    console.log('Server listening at port %d', port);
 });
 
 //function renderCallback(data) {
@@ -125,9 +125,9 @@ rl.on('line', (line) => {
         default:
             break;
     }
-    
+
     rl.prompt();
-    }).on('close', () => {
+}).on('close', () => {
 
 });
 
