@@ -21,12 +21,12 @@ class Game2 extends Cartridge {
     setup() {
         if (typeof(io) !== 'undefined') {
             console.log("using remote")
-            this.client = new RemoteClient((data) => this.updateData(data))
+            this.client = new RemoteClient((data) => this.processData(data))
 
             
         } else {
             console.log("using local")
-            this.client = new LocalClientServer((data) => this.updateData(data))
+            this.client = new LocalClientServer((data) => this.processData(data))
 
         }
     }
@@ -65,8 +65,13 @@ class Game2 extends Cartridge {
 
     }
 
+<<<<<<< HEAD
     updateData(data) {
         //console.log(`me ${data}`)
+=======
+    processData(data) {
+        console.log(`processData: ${data}`)
+>>>>>>> 83ddafd46ab5aa6e6c28702777ecf19e35284f8f
         this.x = data
         this.serverUpdateMeter.update();
     }
