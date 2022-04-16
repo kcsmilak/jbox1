@@ -11,6 +11,7 @@ class LocalClientServer extends Client {
     }
     
     clientUpdate(data) {
+        console.log(`update server ${data}`)
         this.server.handleClientUpdate(data)
     }
 }

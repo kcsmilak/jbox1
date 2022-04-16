@@ -66,6 +66,7 @@ class Game2 extends Cartridge {
     }
 
     updateData(data) {
+        //console.log(`me ${data}`)
         this.x = data
         this.serverUpdateMeter.update();
     }
