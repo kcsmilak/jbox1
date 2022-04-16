@@ -5,7 +5,7 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
-const JboxServer = require('../public/jboxserver')
+const JboxServer = require('../public/jbox/jboxserver')
 
 const port = process.env.port || 8080;
 

@@ -1,6 +1,11 @@
+
+if (typeof(module) !== 'undefined') { Game1 = require('./games/game1'); }
+if (typeof(module) !== 'undefined') { Game2 = require('./games/game2'); }
+
+
 class JboxServer {
     constructor() {
-        this.x = 0
+        this.cartridge = new Game2()
     }
 
     start() {
@@ -13,10 +18,9 @@ class JboxServer {
         //for (let i = 0 ; i < 1000000 ; i++) {
         //   let j = 1
         //}
-        this.x += 4
-        if (this.x > 400) this.x = 0
+        this.cartridge.update()
         
-        let data = this.x
+        let data = this.cartridge.getData()
         this.broadcastState(data)
     }
     
@@ -25,7 +29,7 @@ class JboxServer {
     }
     
     handleClientUpdate(data) {
-        this.x = data
+        this.cartridge.processData(data)
     }
 }
 
