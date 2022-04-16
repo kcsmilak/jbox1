@@ -1,4 +1,4 @@
-
+if (typeof(module) !== 'undefined') { Rectangle = require('./rectangle'); }
 
 class Actor extends Rectangle {
 
@@ -31,3 +31,5 @@ class Actor extends Rectangle {
 
 
 }
+
+if (typeof(module) !== 'undefined') { module.exports = Actor; }

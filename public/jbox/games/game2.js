@@ -2,6 +2,8 @@ if (typeof(module) !== 'undefined') { Cartridge = require('./cartridge'); }
 if (typeof(module) !== 'undefined') { FpsMeterModel = require('../models/fpsmetermodel'); }
 if (typeof(module) !== 'undefined') { ServerUpdateMeterModel = require('../models/serverupdatemetermodel'); }
 
+if (typeof(module) !== 'undefined') { AnimatedCharacter = require('../../jgame/animated_character'); }
+
 class Game2 extends Cartridge {
     constructor() {
         super()
@@ -12,10 +14,13 @@ class Game2 extends Cartridge {
         this.x = 0
         
         this.client = null
+
+        this.character = new AnimatedCharacter("Virtual Guy")
+        
     }
 
     preload() {
-       
+       this.character.load();
     }
 
     setup() {
@@ -39,10 +44,14 @@ class Game2 extends Cartridge {
     }
 
     draw(g) {
+        
+        this.character.update()
         this.fpsMeter.update(g);
 
         g.background(100)
         g.rect(this.x,100,100)
+        
+        this.character.draw(g);
 
         if (this.showCounters) {
             g.push();
@@ -66,7 +75,7 @@ class Game2 extends Cartridge {
     }
 
     processData(data) {
-        console.log(`processData: ${data}`)
+        //console.log(`processData: ${data}`)
         this.x = data
         this.serverUpdateMeter.update();
     }

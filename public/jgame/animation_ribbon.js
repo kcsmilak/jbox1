@@ -17,24 +17,26 @@ class AnimationRibbon {
             this.frames = image.width / frameWidth
             //this.frameImage = createGraphics(frameWidth, frameHeight)
             this.loaded = true
-        })         
+        })
     }
 
     update() {
         this.frame = (this.frame + 1) % this.frames
     }
 
-    draw(flip = false) {
+    draw(g, flip = false) {
         if (!this.loaded) return
         let frameSize = this.image.width / this.frames
-        push()
+        g.push() //p5
         if (flip) {
-            translate(frameSize,0)
-            scale(-1,1)
+            g.translate(frameSize,0)
+            g.scale(-1,1)
         }
         //scale(2)
-        copy(this.image,this.frame * frameSize,0,frameSize,frameSize,0,0,frameSize,frameSize) //p5
-        pop()
+        g.copy(this.image,this.frame * frameSize,0,frameSize,frameSize,0,0,frameSize,frameSize) //p5
+        g.pop() //p5
     }
     
 }
+
+if (typeof(module) !== 'undefined') { module.exports = AnimationRibbon; }

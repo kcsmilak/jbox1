@@ -1,9 +1,10 @@
+if (typeof(module) !== 'undefined') { AnimationRibbon = require('./animation_ribbon'); }
 
 class AnimatedCharacter {
-    static get IDLE() { return 0 } 
-    static get RUN() { return 1 } 
-    static get JUMP() { return 2 } 
-    static get FALL() { return 3 } 
+    static get IDLE() { return 0 }
+    static get RUN() { return 1 }
+    static get JUMP() { return 2 }
+    static get FALL() { return 3 }
     
     constructor(character) {
         this.ribbons = {}
@@ -29,9 +30,9 @@ class AnimatedCharacter {
         this.setAnimation(AnimatedCharacter.IDLE)
     }
 
-    draw() {
+    draw(g) {
         if (this.activeRibbon == null) return
-        this.ribbons[this.activeRibbon].draw(this.flip)
+        this.ribbons[this.activeRibbon].draw(g, this.flip)
     }
 
     setAnimation(animationType) {
@@ -39,3 +40,5 @@ class AnimatedCharacter {
     }
 
 }
+
+if (typeof(module) !== 'undefined') { module.exports = AnimatedCharacter; }

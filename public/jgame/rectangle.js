@@ -1,5 +1,5 @@
 class Rectangle {
-    constructor(x=0, y=0, width=0,height=0) {
+    constructor(x=0, y=0, width=32,height=32) {
         this.x = x
         this.y = y
         this.width = width
@@ -18,17 +18,17 @@ class Rectangle {
 
     collideRect(rect2) {
         let rect1 = this
-        return rect1.right > rect2.left && 
-            rect1.left < rect2.right && 
-            rect1.bottom > rect2.top && 
+        return rect1.right > rect2.left &&
+            rect1.left < rect2.right &&
+            rect1.bottom > rect2.top &&
             rect1.top < rect2.bottom
     }
 
     collidePoint(x,y) {
-        if (x >= this.left &&        
-            x <= this.right &&   
-            y >= this.top &&   
-            y <= this.bottom) { 
+        if (x >= this.left &&
+            x <= this.right &&
+            y >= this.top &&
+            y <= this.bottom) {
             return true;
         }
 
@@ -36,7 +36,9 @@ class Rectangle {
         
     }
     
-    draw() {
-        rect(this.x, this.y, this.width, this.height) //p5
-    }   
+    draw(g) {
+        g.rect(this.x, this.y, this.width, this.height) //p5
+    }
 }
+
+if (typeof(module) !== 'undefined') { module.exports = Rectangle; }
