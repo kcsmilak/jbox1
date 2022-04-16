@@ -65,13 +65,8 @@ class Game2 extends Cartridge {
 
     }
 
-<<<<<<< HEAD
-    updateData(data) {
-        //console.log(`me ${data}`)
-=======
     processData(data) {
         console.log(`processData: ${data}`)
->>>>>>> 83ddafd46ab5aa6e6c28702777ecf19e35284f8f
         this.x = data
         this.serverUpdateMeter.update();
     }

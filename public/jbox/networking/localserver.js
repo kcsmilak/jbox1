@@ -8,7 +8,7 @@ class LocalServer extends JboxServer {
     }
 
     broadcastState(data) {
-        //this.callback(data);
+        this.callback(data);
     }
     
     handleClientUpdate(data) {
