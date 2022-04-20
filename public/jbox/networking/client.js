@@ -2,7 +2,7 @@ class Client {
     constructor() {
     }
     
-    handleServerUpdate(data) {
+    handleUpdateFromServer(data) {
         
     }
 }

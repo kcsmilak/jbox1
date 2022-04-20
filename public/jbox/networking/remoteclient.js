@@ -21,13 +21,13 @@ class RemoteClient extends Client {
             });
           
             this.socket.on("heartbeat", (data) => {
-                this.handleServerUpdate(data);
+                this.handleUpdateFromServer(data);
             })
             
         this.callback = callback;
     }
     
-    handleServerUpdate(data) {
+    handleUpdateFromServer(data) {
         this.callback(data)
     }
     

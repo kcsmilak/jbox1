@@ -6,12 +6,12 @@ class LocalClientServer extends Client {
         this.server.start()
     }
     
-    handleServerUpdate(data) {
+    handleUpdateFromServer(data) {
         this.callback(data)
     }
     
     clientUpdate(data) {
         console.log(`update server ${data}`)
-        this.server.handleClientUpdate(data)
+        this.server.handleUpdateFromClient(data)
     }
 }
