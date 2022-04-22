@@ -23,8 +23,8 @@ class Game4Player {
     }
 
     applyInput(input) {
-        this.x  +=  input.x_press_time * this.speed
-        this.y  +=  input.y_press_time * this.speed
+        this.x += input.x_press_time * this.speed
+        this.y += input.y_press_time * this.speed
         //console.log(`apply player input: [${input.press_time}] x=[${this.x}]->[${update}]=>[${nx}]`)
         //this.x += (1) * update
         //this.x += 1
@@ -53,7 +53,12 @@ class Game4Game {
     }
 
     removePlayer(id) {
-        this.players = this.players.filter(player => { player.id != id })
+        //this.players = this.players.filter(player => { player.id.localeCompare(id) != 0 })
+
+        let index = 0
+        for (let i = 0; i < this.players.length; i++)
+            if (this.players[i].id.localeCompare(id) == 0) index = i
+        this.players.splice(index, 1)
 
     }
 }
@@ -142,6 +147,8 @@ class Game4Client extends Game4Game {
             //console.log(`d:${data}`)
             data = JSON.parse(data)
 
+            let playersUpdated = []
+
             data.forEach(element => {
                 element = JSON.parse(element)
                 //console.log(`element: id:${element.id}`)
@@ -150,6 +157,9 @@ class Game4Client extends Game4Game {
                 let x = +element.x
                 let y = +element.y
                 let last_processed_input = +element.last_processed_input
+
+                playersUpdated.push(id)
+
 
                 let player = this.getPlayerById(id)
                 if (player == null) {
@@ -183,6 +193,8 @@ class Game4Client extends Game4Game {
                     }
 
                 } else {
+
+
                     if (!this.entity_interpolation) {
                         player.x = x
                         player.y = y
@@ -193,6 +205,18 @@ class Game4Client extends Game4Game {
                     }
                 }
 
+            })
+
+            let playersToRemove = []
+            this.players.forEach(player => {
+                if (!playersUpdated.includes(player.id)) {
+                    playersToRemove.push(player.id)
+                    console.log(`dropping player: ${player.id}`)
+                }
+            })
+
+            playersToRemove.forEach(player => {
+                this.removePlayer(player.id)
             })
 
         }
@@ -211,22 +235,24 @@ class Game4Client extends Game4Game {
         this.last_ts = now_ts;
 
         // Package player's input.
-        
+
         let x_press_time = 0
         let y_press_time = 0
-        
+
         if (this.keyboard.d) {
             x_press_time = dt_sec
         } else if (this.keyboard.a) {
-            x_press_time = -dt_sec ;
-        } 
+            x_press_time = -dt_sec;
+        }
 
         if (this.keyboard.w) {
             y_press_time = -dt_sec
         } else if (this.keyboard.s) {
-            y_press_time = dt_sec ;
-        } 
-        
+            y_press_time = dt_sec;
+        }
+
+        if (!x_press_time && !y_press_time) return // no input this round
+
         let input = { x_press_time: x_press_time, y_press_time: y_press_time }
 
         // Send the input to the server.
@@ -335,7 +361,7 @@ class Game4Server extends Game4Game {
     }
 
     removeClient(id) {
-        //this.removePlayer(id)
+        this.removePlayer(id)
     }
 
     processInput(data, id) {
@@ -369,6 +395,7 @@ class Game4Server extends Game4Game {
                 //console.log(`process input: id:${data.id} data:${data.press_time} seq:${data.input_sequence_number}`)
                 var id = data.id;
                 let player = this.getPlayerById(id)
+                if (!player) continue // player must have disconnected
                 player.applyInput(data);
                 player.last_processed_input = data.input_sequence_number;
                 //console.log(player.last_processed_input)
