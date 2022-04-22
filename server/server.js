@@ -33,26 +33,7 @@ const rl = readline.createInterface({
 rl.prompt();
 
 rl.on('line', (line) => {
-    switch (line.trim()) {
-        case 'hello':
-            console.log('world!');
-            break;
-        case 'game':
-            console.log(game);
-            break;
-        case 'players':
-            console.log(game.players);
-            break;
-        case 'tanks':
-            console.log(game.tanks);
-            break;
-        case 'quit':
-            console.log('Have a great day!');
-            process.exit(0);
-            break;
-        default:
-            break;
-    }
+    jboxServer.handleLineInput(line)
 
     rl.prompt();
 }).on('close', () => {

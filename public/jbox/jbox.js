@@ -20,7 +20,7 @@ class Jbox {
     }
     
     update() {
-        //this.cartridge.update()
+        this.cartridge.update()
     }
     
     draw() {

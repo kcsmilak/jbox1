@@ -1,4 +1,4 @@
-if (typeof(module) !== 'undefined') { JboxServer = require('../jboxserver'); }
+if (typeof (module) !== 'undefined') { JboxServer = require('./jboxserver'); }
 
 class NodeServer extends JboxServer {
     constructor(io) {
@@ -48,8 +48,8 @@ class NodeServer extends JboxServer {
             });
 
             socket.on('clientUpdate', (data) => {
-                console.log(`clientUpdate: ${socket.id} ${data}`);
-                super.handleUpdateFromClient(socket.id, data)
+                //console.log(`clientUpdate: ${socket.id} ${data}`);
+                super.handleUpdateFromClient(data, socket.id)
             });
 
         });
@@ -60,6 +60,7 @@ class NodeServer extends JboxServer {
         //console.log(data)
         this.io.emit('heartbeat', data)
     }
+
 }
 
-if (typeof(module) !== 'undefined') { module.exports = NodeServer; }
+if (typeof (module) !== 'undefined') { module.exports = NodeServer; }

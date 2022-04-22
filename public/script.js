@@ -1,37 +1,26 @@
 
-
-
-
-
-
-
-
-
-
 let jbox = new Jbox(this);
 
 
-function preload() {
-
+function preload() { //p5
     jbox.preload();
 }
 
 
-function setup() {
-
-    
-    canvas = createCanvas(windowWidth, windowHeight);
+function setup() { // p5
+    canvas = createCanvas(windowWidth, windowHeight); // p5
     jbox.setup()
 }
 
-function update() {
-    jbox.update()
-}
+//function update() { // never called in p5
+//    jbox.update()
+//}
 
-function draw() {
+function draw() { // p5
+    jbox.update()
     jbox.draw()
 }
 
-function mousePressed(event) {
+function mousePressed(event) { // p5
     jbox.mousePressed(event.x,event.y)
 }
