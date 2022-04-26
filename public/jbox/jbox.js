@@ -1,7 +1,7 @@
 class Jbox {
     constructor(canvas) {
         this.g = canvas
-        this.cartridge = new Game4(1)
+        this.cartridge = new Game5(1)
 
     }
     

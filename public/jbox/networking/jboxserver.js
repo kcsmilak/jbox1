@@ -3,17 +3,18 @@ if (typeof(module) !== 'undefined') { Game1 = require('../games/game1'); }
 if (typeof(module) !== 'undefined') { Game2 = require('../games/game2'); }
 if (typeof(module) !== 'undefined') { Game3 = require('../games/game3'); }
 if (typeof(module) !== 'undefined') { Game4 = require('../games/game4'); }
+if (typeof(module) !== 'undefined') { Game5 = require('../games/game5'); }
 
 
 class JboxServer {
     constructor() {
-        this.cartridge = new Game4(2, this)
+        this.cartridge = new Game5(2, this)
     }
 
     start() {
         setInterval(() => {
             this.update();
-        }, 1000 / 30)
+        }, 1000 / 120)
     }
     
     update() {
