@@ -1,6 +1,10 @@
+if (typeof (module) !== 'undefined') { Rectangle = require('../../jgame/rectangle'); }
+
 if (typeof (module) !== 'undefined') { Cartridge = require('./cartridge'); }
 if (typeof (module) !== 'undefined') { FpsMeterModel = require('../models/fpsmetermodel'); }
 if (typeof (module) !== 'undefined') { ServerUpdateMeterModel = require('../models/serverupdatemetermodel'); }
+if (typeof (module) !== 'undefined') { GameMap = require('../../jgame/gamemap'); }
+if (typeof (module) !== 'undefined') { Tile = require('../../jgame/tile'); }
 
 
 class Game5Player {
@@ -16,6 +20,24 @@ class Game5Player {
 
     draw(g) {
         g.rect(this.x, this.y, 32)
+    }
+
+    update(obstacles = null) {
+
+        let dy = 1
+
+        let tempRect = new Rectangle(this.x, this.y+dy, 32,32)
+        obstacles.forEach(obstacle => {
+            if (tempRect.collideRect(obstacle)) {
+                dy = 0
+            } else {
+                //console.log("n")
+            }
+            //console.log("y")
+        })
+        //console.log("o")
+        
+        this.y += dy
     }
 
     toJSON() {
@@ -34,6 +56,7 @@ class Game5Player {
 class Game5Game {
     constructor() {
         this.players = []
+        this.tiles = []
         this.gameMap = new GameMap()
     }
 
@@ -91,6 +114,7 @@ class Game5Client extends Game5Game {
     draw(g) {
         this.fpsMeter.update(g);
 
+        debug.log(Math.floor(this.fpsMeter.history.average()), "fps")
 
 
 
@@ -118,7 +142,7 @@ class Game5Client extends Game5Game {
             g.pop();
         }
 
-
+        debug.draw()
 
     }
 
@@ -194,6 +218,11 @@ class Game5Client extends Game5Game {
                     player.x = x
                     player.y = y
                     player.last_processed_input = last_processed_input
+
+                    debug.log(Math.floor(x), "x")
+                    debug.log(Math.floor(y), "y")
+                    debug.log(last_processed_input, "i")
+                    
                     if (this.server_reconciliation) {
                         // Server Reconciliation. Re-apply all the inputs not yet processed by
                         // the server.
@@ -334,6 +363,10 @@ class Game5Client extends Game5Game {
             }
         }
     }
+
+    loadGameMap() {
+        this.gameMap.loadGameMap()
+    }    
 }
 
 class Game5Server extends Game5Game {
@@ -351,31 +384,47 @@ class Game5Server extends Game5Game {
     update() {
         //console.log("server tick")
 
+        //if (!this.gameMap.isLoaded()) return
+        if (this.tiles.length <= 0) {
+            this.processGameMap()
+            //console.log("processing map")
+
+        }
+
         // processInputs
         this.processInputs()
 
         // update world
-
+        this.players.forEach(player => { player.update(this.tiles) })
 
         // broadcastState
-        /*
-        let state = {}
-        players.forEach(player => {
-            state.push({
-                id: player.id,
-                
-            })
-        })
-        */
-
         let state = JSON.stringify(this.players)
         this.server.broadcastState(state)
 
         // renderWorld
+        // no server output
 
     }
 
-
+    processGameMap() {
+        for (let row = 0; row < this.gameMap.mapData.length; row++) {
+            for (let col = 0; col < this.gameMap.mapData[0].length; col++) {
+                let partNumber = this.gameMap.mapData[row][col]
+                let x= col*16
+                let y= row*16
+                if (partNumber > 0) {
+                    this.tiles.push(new Tile(x,y,partNumber,this.gameMap.tileMap))
+                } else if (partNumber == -1) {
+                    //this.player = new Player()
+                    //this.player.x = x
+                    //this.player.y = y
+                    //this.camera = new Rectangle(this.player.x,this.player.y,400,200)
+                } else if (partNumber == -2) {
+                    //this.enemies.push(new Enemy(x, y))
+                }                
+            }
+        }
+    }
 
     addClient(id) {
         this.addPlayer(id)
@@ -449,6 +498,10 @@ class Game5Server extends Game5Game {
                 break;
         }
     }
+
+    loadGameMap() {
+        this.gameMap.loadGameMapServerSide()
+    }
 }
 
 class Game5 extends Cartridge {
@@ -467,7 +520,7 @@ class Game5 extends Cartridge {
     }
 
     setup() {
-        this.part.gameMap.loadGameMap()
+        this.part.loadGameMap()
 
     }
 

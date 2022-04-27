@@ -95,3 +95,5 @@ class TileMapSelector {
         this.tileMap.draw(x, y)
     }
 }
+
+if (typeof(module) !== 'undefined') { module.exports = TileMap; }

@@ -15,6 +15,8 @@ class JboxServer {
         setInterval(() => {
             this.update();
         }, 1000 / 120)
+        this.cartridge.preload()
+        this.cartridge.setup()
     }
     
     update() {
