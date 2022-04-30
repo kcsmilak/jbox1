@@ -24,3 +24,7 @@ function draw() { // p5
 function mousePressed(event) { // p5
     jbox.mousePressed(event.x,event.y)
 }
+
+function keyPressed(event) { //p5
+    jbox.keyPressed(event.keyCode)
+}

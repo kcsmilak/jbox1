@@ -14,6 +14,12 @@ class Game5Player {
         this.x = Math.floor(Math.random() * 200)
         this.y = Math.floor(Math.random() * 200)
 
+        this.dx = 0
+        this.dy = 0
+
+        this.maxDy = 10
+        this.maxDx = 10
+        
         this.position_buffer = []
         this.last_processed_input = 0
     }
@@ -24,7 +30,7 @@ class Game5Player {
 
     update(obstacles = null) {
 
-        let dy = 1
+        let dy = Math.min(this.dy + .2, this.maxDy)
 
         let tempRect = new Rectangle(this.x, this.y+dy, 32,32)
         obstacles.forEach(obstacle => {
@@ -35,9 +41,26 @@ class Game5Player {
             }
             //console.log("y")
         })
+
+        let dx = Math.min(this.dx, this.maxDx)
+
+        tempRect = new Rectangle(this.x + dx, this.y, 32,32)
+        obstacles.forEach(obstacle => {
+            if (tempRect.collideRect(obstacle)) {
+                dx = 0
+            } else {
+                //console.log("n")
+            }
+            //console.log("y")
+        })        
         //console.log("o")
+
+        this.dy = dy
+        this.dx = dx
         
         this.y += dy
+        this.x += dx
+
     }
 
     toJSON() {
@@ -45,8 +68,8 @@ class Game5Player {
     }
 
     applyInput(input) {
-        this.x += input.x_press_time * this.speed
-        this.y += input.y_press_time * this.speed
+        this.dx = input.x_press_time * this.speed
+        this.dy += input.y_press_time * this.speed
         //console.log(`apply player input: [${input.press_time}] x=[${this.x}]->[${update}]=>[${nx}]`)
         //this.x += (1) * update
         //this.x += 1
