@@ -89,7 +89,7 @@ class GameMap {
             }
             mapData.splice(0, mapData.length);
 
-            /*
+            
             let rows = csv.split('\n');
             for (let row = 0; row < rows.length; row++) {
                 let cols = rows[row].split(',');
@@ -109,9 +109,9 @@ class GameMap {
                 }
                 mapData.push(datatopush);
             }
-*/
 
-            this.csvToMatrix(csv, mapData)
+
+            //this.csvToMatrix(csv, mapData)
             //mapData.push(this.csvToMatrix(csv))
             console.table(mapData);
             //console.log(mapData)
@@ -131,10 +131,10 @@ class GameMap {
             console.log(data)
             
             let remoteImage = 'data:image/png;base64,' + data[0][0]
-            let tileSize = data[1][0]
+            this.tileSize = data[1][0]
             loadImage(remoteImage, tileMapImage => {
                 this.tileMapLoaded = true
-                this.tileMap.loadImage(tileMapImage, tileSize, tileSize)
+                this.tileMap.loadImage(tileMapImage, this.tileSize, this.tileSize)
                 //console.log('loaded')
             })
             
@@ -187,6 +187,7 @@ class GameMap {
         // draw gameMap
         //if (!this.isLoaded()) return
         let tileSize = this.tileSize
+        debug.log(tileSize, 'tileSize')
         for (let row = 0; row < this.mapData.length; row++) {
             for (let col = 0; col < this.mapData[row].length; col++) {
                 let tilePart = this.mapData[row][col]

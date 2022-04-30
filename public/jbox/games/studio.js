@@ -30,9 +30,9 @@ class Studio extends Cartridge {
         if (this.showTileMap)
             this.gameMap.tileMap.draw(0,0)
 
-        //this.gameMap.tileMap.drawSelectedPart(0,0)
+        this.gameMap.tileMap.drawSelectedPart(0,0)
         
-
+        debug.draw()
     }
 
     mousePressed(x,y) {
