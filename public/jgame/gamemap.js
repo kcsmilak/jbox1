@@ -2,6 +2,33 @@ if (typeof (module) !== 'undefined') { TileMap = require('./tilemap'); }
 if (typeof (module) !== 'undefined') { request = require('request'); }
 
 
+
+
+class DesertTileMapFile {
+    constructor() {
+        this.filename = "../Images/Terrain/B04505_03_03.jpg"
+        this.padding = 1
+        this.tileSize = 32
+        this.margin = 2
+    }
+
+
+}
+
+
+
+class NatureTileMapFile {
+    constructor() {
+        this.filename = "../Images/Terrain/RPG Nature Tileset.png"
+        this.padding = 0
+        this.tileSize = 32
+        this.margin = 0
+    }
+
+
+}
+
+
 class GameMap {
     constructor() {
         this.mapData = []
@@ -89,7 +116,7 @@ class GameMap {
             }
             mapData.splice(0, mapData.length);
 
-            
+
             let rows = csv.split('\n');
             for (let row = 0; row < rows.length; row++) {
                 let cols = rows[row].split(',');
@@ -119,37 +146,49 @@ class GameMap {
         });
 
 
-        let tilemapurl =
-            'https://docs.google.com/spreadsheets/d/' + mapKey
-            + '/gviz/tq?tqx=out:csv&sheet=tilemap';
+        if (0) {
+            let tilemapurl =
+                'https://docs.google.com/spreadsheets/d/' + mapKey
+                + '/gviz/tq?tqx=out:csv&sheet=tilemap';
 
-        httpGet(tilemapurl, csv => {
+            httpGet(tilemapurl, csv => {
 
-            let data = []
-            this.csvToMatrix(csv, data);
+                let data = []
+                this.csvToMatrix(csv, data);
 
-            console.log(data)
-            
-            let remoteImage = 'data:image/png;base64,' + data[0][0]
-            this.tileSize = data[1][0]
-            loadImage(remoteImage, tileMapImage => {
+                console.log(data)
+
+                let remoteImage = 'data:image/png;base64,' + data[0][0]
+                this.tileSize = data[1][0]
+                loadImage(remoteImage, tileMapImage => {
+                    this.tileMapLoaded = true
+                    this.tileMap.loadImage(tileMapImage, this.tileSize, this.tileSize)
+                    //console.log('loaded')
+                })
+
+                /*
+                let tileSize = Math.floor(csv.split('"')[3])
+    
+                this.tileSize = tileSize
+                let remoteData = 'data:image/png;base64,' + csv.split('"')[1]
+                loadImage(remoteData, tileMapImage => {
+                    this.tileMapLoaded = true
+                    this.tileMap.loadImage(tileMapImage, tileSize, tileSize)
+                    //console.log('loaded')
+                })
+    */
+            });
+        } else {
+            let tileMapFile = new NatureTileMapFile()
+            console.log(`loading file: ${tileMapFile.filename}`)
+            this.tileSize = tileMapFile.tileSize
+            loadImage(tileMapFile.filename, tileMapImage => {
                 this.tileMapLoaded = true
                 this.tileMap.loadImage(tileMapImage, this.tileSize, this.tileSize)
                 //console.log('loaded')
             })
-            
-            /*
-            let tileSize = Math.floor(csv.split('"')[3])
+        }
 
-            this.tileSize = tileSize
-            let remoteData = 'data:image/png;base64,' + csv.split('"')[1]
-            loadImage(remoteData, tileMapImage => {
-                this.tileMapLoaded = true
-                this.tileMap.loadImage(tileMapImage, tileSize, tileSize)
-                //console.log('loaded')
-            })
-*/
-        });
 
 
 
@@ -183,7 +222,7 @@ class GameMap {
         return data
     }
 
-    draw() {
+    draw(g) {
         // draw gameMap
         //if (!this.isLoaded()) return
         let tileSize = this.tileSize
@@ -192,7 +231,7 @@ class GameMap {
             for (let col = 0; col < this.mapData[row].length; col++) {
                 let tilePart = this.mapData[row][col]
                 if (tilePart >= 0) {
-                    this.tileMap.drawPart(tilePart, col * tileSize, row * tileSize)
+                    this.tileMap.drawPart(g, tilePart, col * tileSize, row * tileSize)
                 }
             }
         }

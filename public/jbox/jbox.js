@@ -2,7 +2,7 @@ class Jbox {
     constructor(canvas) {
         this.g = canvas
         this.keyboard = new Keyboard()
-        this.cartridge = new Studio()// Game5(1)
+        this.cartridge = new Studio(this.g)// Game5(1)
 
     }
 
