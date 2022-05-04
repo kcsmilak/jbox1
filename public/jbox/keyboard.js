@@ -13,6 +13,7 @@ class Keyboard {
     get e() { return keyIsDown(69) } //p5
     get g() { return keyIsDown(71) } //p5
 
+    get k0() { return keyIsDown(48) } //p5
     get k1() { return keyIsDown(49) } //p5
     get k2() { return keyIsDown(50) } //p5
     get k3() { return keyIsDown(51) } //p5

@@ -430,6 +430,7 @@ class Game5Server extends Game5Game {
     }
 
     processGameMap() {
+        return
         for (let row = 0; row < this.gameMap.mapData.length; row++) {
             for (let col = 0; col < this.gameMap.mapData[0].length; col++) {
                 let partNumber = this.gameMap.mapData[row][col]

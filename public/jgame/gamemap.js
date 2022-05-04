@@ -28,11 +28,41 @@ class NatureTileMapFile {
 
 }
 
+class GameMapLayer {
+    constructor(tileMap) {
+        this.tileMap = tileMap
+        this.tileSize = 32
+        this.mapData = []
+    }
+
+    draw(g) {
+        // draw gameMap
+        //if (!this.isLoaded()) return
+        g.push()
+        //g.noStroke()
+        let tileSize = this.tileSize
+        debug.log(tileSize, 'tileSize')
+        for (let row = 0; row < this.mapData.length; row++) {
+            for (let col = 0; col < this.mapData[row].length; col++) {
+                let tilePart = this.mapData[row][col]
+                if (tilePart > 0) {
+                    this.tileMap.drawPart(g, tilePart, col * tileSize, row * tileSize)
+                }
+            }
+        }
+        g.pop()
+        debug.log("draw")
+    }
+}
+
 
 class GameMap {
     constructor() {
-        this.mapData = []
+        this.mapLayers = []
         this.tileMap = new TileMap()
+
+        this.mapLayers.push(new GameMapLayer(this.tileMap))
+        this.mapLayers.push(new GameMapLayer(this.tileMap))
 
         this.tileMapLoaded = false
         this.gameDataLoaded = false
@@ -44,6 +74,7 @@ class GameMap {
 
 
     loadGameMapServerSide() {
+        return
         let mapData = this.mapData;
 
         let platformerKey =
@@ -53,7 +84,7 @@ class GameMap {
         let mapKey = testKey;
         let url =
             'https://docs.google.com/spreadsheets/d/' + mapKey
-            + '/gviz/tq?tqx=out:csv&sheet=live';
+            + '/gviz/tq?tqx=out:csv&sheet=live-1';
 
         request(url, { csv: true }, (err, res, body) => {
             if (err) { return console.log(err); }
@@ -97,7 +128,18 @@ class GameMap {
 
 
     loadGameMap() {
-        let mapData = this.mapData;
+
+        this.loadTileMap()
+
+        this.loadGameMapLayer(1)
+        this.loadGameMapLayer(2)
+
+    }
+
+    loadGameMapLayer(layer) {
+
+
+        let mapData = this.mapLayers[layer - 1].mapData;
 
         let platformerKey =
             '1jbsapypHN5FX6k8K7Zs271bY8QSzSMiLkHFi2667nsU';
@@ -106,7 +148,7 @@ class GameMap {
         let mapKey = testKey;
         let url =
             'https://docs.google.com/spreadsheets/d/' + mapKey
-            + '/gviz/tq?tqx=out:csv&sheet=live';
+            + '/gviz/tq?tqx=out:csv&sheet=live-' + layer;
 
         //url = "mapdata.csv"
 
@@ -145,6 +187,15 @@ class GameMap {
             this.gameDataLoaded = true
         });
 
+
+
+
+
+
+
+    }
+
+    loadTileMap() {
 
         if (0) {
             let tilemapurl =
@@ -189,10 +240,9 @@ class GameMap {
             })
         }
 
-
-
-
-
+        this.mapLayers.forEach(layer => {
+            layer.tileMap = this.tileMap
+        })
 
 
     }
@@ -223,18 +273,11 @@ class GameMap {
     }
 
     draw(g) {
-        // draw gameMap
-        //if (!this.isLoaded()) return
-        let tileSize = this.tileSize
-        debug.log(tileSize, 'tileSize')
-        for (let row = 0; row < this.mapData.length; row++) {
-            for (let col = 0; col < this.mapData[row].length; col++) {
-                let tilePart = this.mapData[row][col]
-                if (tilePart >= 0) {
-                    this.tileMap.drawPart(g, tilePart, col * tileSize, row * tileSize)
-                }
-            }
-        }
+
+        this.mapLayers.forEach(layer => {
+            layer.draw(g)
+        })
+
 
     }
 

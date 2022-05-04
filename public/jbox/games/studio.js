@@ -50,6 +50,8 @@ class Studio extends Cartridge {
         this.tileSetView = null
         this.tileMapView = null
 
+        this.editingGameMapLayer = 1
+
     }
 
     preload() {
@@ -94,7 +96,7 @@ class Studio extends Cartridge {
             return
         }
 
-        let scriptkey = 'AKfycbwTh4x8aWvBrpyPae4T6OZPmcv1G0lXiSn8ll_xBHqeYlq8qvDvGHdeAOZpnZRg1CLy2g'
+        let scriptkey = 'AKfycbwgaP26cYuevgqvsFsDYLhuudOyna_uU1VDKGIbMytmIcyFPZLGdWWDeOQVgB_5pI0CnQ'
         let url = 'https://script.google.com/macros/s/' + scriptkey + '/exec?name=Test';
 
 
@@ -103,8 +105,10 @@ class Studio extends Cartridge {
 
         //console.log(val)
 
-        let rows = this.gameMap.mapData.length
-        let cols = this.gameMap.mapData[0].length
+        let mapData = this.gameMap.mapLayers[this.editingGameMapLayer-1].mapData
+        
+        let rows = mapData.length
+        let cols = mapData[0].length
 
         let tileSize = 32
 
@@ -118,14 +122,16 @@ class Studio extends Cartridge {
         let col = int((x / (tileSize * cols)) * cols)
         let row = int((y / (tileSize * rows)) * rows)
 
-        let cur = this.gameMap.mapData[row][col]
-        this.gameMap.mapData[row][col] = val
-        let set = this.gameMap.mapData[row][col]
+        let cur = mapData[row][col]
+        mapData[row][col] = val
+        let set = mapData[row][col]
 
-        console.log(`row:${row} col:${col} x:${x} y:${y} rows:${rows} cols:${cols} cur:${cur} val:${val} set:${set}`)
+        let layer = this.editingGameMapLayer
+
+        console.log(`row:${row} col:${col} x:${x} y:${y} rows:${rows} cols:${cols} cur:${cur} val:${val} set:${set} layer:${layer}`)
 
 
-        let postData = { x: col, y: row, val: val };
+        let postData = { x: col, y: row, val: val, layer: layer };
         console.log(postData)
         postData = JSON.stringify(postData)
 
@@ -141,5 +147,17 @@ class Studio extends Cartridge {
             else
                 this.showTileMap = true
         }
+
+        if (this.keyboard.k1) {
+            this.editingGameMapLayer = 1
+        }
+        if (this.keyboard.k2) {
+            this.editingGameMapLayer = 2
+        } 
+        if (this.keyboard.k3) {
+            this.editingGameMapLayer = 3
+        }         
+
+        debug.log(this.editingGameMapLayer, "layer")
     }
 }

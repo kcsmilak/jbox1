@@ -50,7 +50,7 @@ class Jbox {
     keyPressed(keyCode) {
 
         console.log("handler")
-
+/*
         if (this.keyboard.k1) {
             console.log("loading game...")
             this.loadGame()
@@ -62,8 +62,9 @@ class Jbox {
             this.loadStudio()
             return
         }
-
+*/
 
         this.cartridge.keyPressed(keyCode)
     }
 }
+

@@ -28,3 +28,7 @@ function mousePressed(event) { // p5
 function keyPressed(event) { //p5
     jbox.keyPressed(event.keyCode)
 }
+
+document.oncontextmenu = function() {
+    return false;
+}
